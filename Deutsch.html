@@ -37,11 +37,13 @@ body {
   font-family:'Baloo 2',cursive;
   font-size:3rem;
   color:#ff2e88;
+  margin:0;
 }
 
 .hero p {
   font-weight:700;
   color:#4a148c;
+  margin-top:8px;
 }
 
 .filter-bar {
@@ -49,15 +51,21 @@ body {
   justify-content:center;
   gap:10px;
   margin-bottom:20px;
+  flex-wrap:wrap;
 }
 
 .filter-btn {
-  padding:8px 16px;
+  padding:10px 18px;
   border-radius:999px;
   border:none;
   font-weight:800;
   cursor:pointer;
   background:white;
+  transition:0.3s;
+}
+
+.filter-btn:hover {
+  transform:scale(1.05);
 }
 
 .filter-btn.active {
@@ -110,6 +118,7 @@ body {
   color:white;
   font-weight:900;
   font-size:1.5rem;
+  text-transform:lowercase;
 }
 
 .word {
@@ -132,21 +141,28 @@ body {
 .btns {
   display:flex;
   gap:8px;
-  margin-top:8px;
+  margin-top:10px;
 }
 
 button {
   flex:1;
-  padding:8px;
+  padding:10px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   color:white;
   font-weight:800;
   cursor:pointer;
+  transition:0.2s;
+  font-size:1rem;
 }
 
-.slow { background:#ff7043; }
-.fast { background:#3d8bff; }
+button:hover {
+  transform:translateY(-2px);
+}
+
+.slow {
+  background:#ff7043;
+}
 
 footer {
   text-align:center;
@@ -161,13 +177,13 @@ footer {
 
 <div class="hero">
   <h1>🇩🇪 Learn German ABC</h1>
-  <p>Tap to hear pronunciation 🎧</p>
+  <p>Tap buttons to hear pronunciation 🎧</p>
 </div>
 
 <div class="filter-bar">
-  <button class="filter-btn active" data="all">All</button>
-  <button class="filter-btn" data="az">A-Z</button>
-  <button class="filter-btn" data="special">Ä Ö Ü ß</button>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="az">A-Z</button>
+  <button class="filter-btn" data-filter="special">Ä Ö Ü ß</button>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -175,97 +191,109 @@ footer {
 <footer>German Alphabet Learning App 🌈</footer>
 
 <script>
-const COLORS = ["#ff3b5c","#ff7b2f","#ffd600","#00d68f","#3d8bff","#9b59ff","#ff5fac"];
-
-const data = [
-  {l:"A a",w:"Apfel",e:"🍎",s:"ah"},
-  {l:"B b",w:"Ball",e:"⚽",s:"beh"},
-  {l:"C c",w:"Café",e:"☕",s:"tseh"},
-  {l:"D d",w:"Dach",e:"🏠",s:"deh"},
-  {l:"E e",w:"Essen",e:"🍽️",s:"eh"},
-  {l:"F f",w:"Fisch",e:"🐟",s:"eff"},
-  {l:"G g",w:"Glas",e:"🥛",s:"geh"},
-  {l:"H h",w:"Haus",e:"🏡",s:"hah"},
-  {l:"I i",w:"Insel",e:"🏝️",s:"ee"},
-  {l:"J j",w:"Jahr",e:"📅",s:"yot"},
-  {l:"K k",w:"Kuchen",e:"🎂",s:"kah"},
-  {l:"L l",w:"Lampe",e:"💡",s:"ell"},
-  {l:"M m",w:"Maus",e:"🐭",s:"emm"},
-  {l:"N n",w:"Nacht",e:"🌙",s:"enn"},
-  {l:"O o",w:"Obst",e:"🍊",s:"oh"},
-  {l:"P p",w:"Pferd",e:"🐴",s:"peh"},
-  {l:"Q q",w:"Qualität",e:"⭐",s:"koo"},
-  {l:"R r",w:"Radio",e:"📻",s:"err"},
-  {l:"S s",w:"Sonne",e:"☀️",s:"ess"},
-  {l:"T t",w:"Tisch",e:"🪑",s:"teh"},
-  {l:"U u",w:"Uhr",e:"⏰",s:"oo"},
-  {l:"V v",w:"Vogel",e:"🐦",s:"veh"},
-  {l:"W w",w:"Wasser",e:"💧",s:"veh"},
-  {l:"X x",w:"Boxen",e:"🥊",s:"iks"},
-  {l:"Y y",w:"Yoga",e:"🧘",s:"üpsilon"},
-  {l:"Z z",w:"Zug",e:"🚂",s:"tset"},
-  {l:"Ä ä",w:"Äpfel",e:"🍏",s:"eh",sp:true},
-  {l:"Ö ö",w:"Öl",e:"🫙",s:"ur",sp:true},
-  {l:"Ü ü",w:"Über",e:"✈️",s:"ee rounded",sp:true},
-  {l:"ß",w:"Straße",e:"🛣️",s:"ss",sp:true}
+const COLORS = [
+  "#ff3b5c",
+  "#ff7b2f",
+  "#ffd600",
+  "#00d68f",
+  "#3d8bff",
+  "#9b59ff",
+  "#ff5fac"
 ];
 
-function speak(t,r){
-  const u=new SpeechSynthesisUtterance(t);
-  u.lang="de-DE";
-  u.rate=r;
+const data = [
+  { upper:'A', lower:'a', phonetic:'Ah', example:'Apfel', emoji:'🍎' },
+  { upper:'B', lower:'b', phonetic:'Beh', example:'Ball', emoji:'⚽' },
+  { upper:'C', lower:'c', phonetic:'Tseh', example:'Computer', emoji:'💻' },
+  { upper:'D', lower:'d', phonetic:'Deh', example:'Dach', emoji:'🏠' },
+  { upper:'E', lower:'e', phonetic:'Eh', example:'Ei', emoji:'🥚' },
+  { upper:'F', lower:'f', phonetic:'Ef', example:'Fisch', emoji:'🐟' },
+  { upper:'G', lower:'g', phonetic:'Geh', example:'Garten', emoji:'🌳' },
+  { upper:'H', lower:'h', phonetic:'Hah', example:'Haus', emoji:'🏡' },
+  { upper:'I', lower:'i', phonetic:'Ih', example:'Insel', emoji:'🏝️' },
+  { upper:'J', lower:'j', phonetic:'Yot', example:'Jahr', emoji:'📅' },
+  { upper:'K', lower:'k', phonetic:'Kah', example:'Kuchen', emoji:'🎂' },
+  { upper:'L', lower:'l', phonetic:'El', example:'Lampe', emoji:'💡' },
+  { upper:'M', lower:'m', phonetic:'Em', example:'Maus', emoji:'🐭' },
+  { upper:'N', lower:'n', phonetic:'En', example:'Nacht', emoji:'🌙' },
+  { upper:'O', lower:'o', phonetic:'Oh', example:'Obst', emoji:'🍊' },
+  { upper:'P', lower:'p', phonetic:'Peh', example:'Pferd', emoji:'🐴' },
+  { upper:'Q', lower:'q', phonetic:'Kuh', example:'Quelle', emoji:'💧' },
+  { upper:'R', lower:'r', phonetic:'Er', example:'Radio', emoji:'📻' },
+  { upper:'S', lower:'s', phonetic:'Es', example:'Sonne', emoji:'☀️' },
+  { upper:'T', lower:'t', phonetic:'Teh', example:'Tisch', emoji:'🪑' },
+  { upper:'U', lower:'u', phonetic:'Uh', example:'Uhr', emoji:'⏰' },
+  { upper:'V', lower:'v', phonetic:'Fau', example:'Vogel', emoji:'🐦' },
+  { upper:'W', lower:'w', phonetic:'Veh', example:'Wasser', emoji:'💧' },
+  { upper:'X', lower:'x', phonetic:'Iks', example:'Xylophon', emoji:'🎼' },
+  { upper:'Y', lower:'y', phonetic:'Üpsilon', example:'Yoga', emoji:'🧘' },
+  { upper:'Z', lower:'z', phonetic:'Tset', example:'Zug', emoji:'🚂' },
+
+  { upper:'Ä', lower:'ä', phonetic:'Äh', example:'Äpfel', emoji:'🍏', special:true },
+  { upper:'Ö', lower:'ö', phonetic:'Öh', example:'Öl', emoji:'🫙', special:true },
+  { upper:'Ü', lower:'ü', phonetic:'Üh', example:'Über', emoji:'✈️', special:true },
+  { upper:'ß', lower:'ß', phonetic:'Eszett', example:'Straße', emoji:'🛣️', special:true }
+];
+
+function speak(text, rate) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  utterance.rate = rate;
   speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  speechSynthesis.speak(utterance);
 }
 
-function render(filter="all"){
-  const grid=document.getElementById("grid");
-  grid.innerHTML="";
+function render(filter = "all") {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
-  data.filter(x=>{
-    if(filter==="all") return true;
-    if(filter==="special") return x.sp;
-    return !x.sp;
-  }).forEach((x,i)=>{
+  const filteredData = data.filter(item => {
+    if (filter === "all") return true;
+    if (filter === "special") return item.special;
+    if (filter === "az") return !item.special;
+    return true;
+  });
 
-    const color=COLORS[i%COLORS.length];
+  filteredData.forEach((item, i) => {
+    const color = COLORS[i % COLORS.length];
 
-    grid.innerHTML+=`
-    <div class="card">
-      <div class="stripe" style="background:${color}"></div>
-      <div class="body">
+    grid.innerHTML += `
+      <div class="card">
+        <div class="stripe" style="background:${color}"></div>
+        <div class="body">
 
-        <div class="top">
-          <div class="bubble" style="background:${color}">${x.l}</div>
-          <div>
-            <div class="word">${x.w}</div>
-            <div class="pron">/${x.s}/</div>
+          <div class="top">
+            <div class="bubble" style="background:${color}">
+              ${item.lower || item.upper}
+            </div>
+            <div>
+              <div class="word">${item.example}</div>
+              <div class="pron">/${item.phonetic}/</div>
+            </div>
           </div>
+
+          <div class="emoji">${item.emoji}</div>
+
+          <div class="btns">
+            <button class="slow" onclick="speak('${item.lower || item.upper}',0.5)">🔤 Letter</button>
+            <button class="slow" onclick="speak('${item.example}',0.5)">🔊 Word</button>
+          </div>
+
         </div>
-
-        <div class="emoji">${x.e}</div>
-
-        <div class="btns">
-          <button class="slow" onclick="speak('${x.w}',0.5)">Word</button>
-          <button class="fast" onclick="speak('${x.w}',1)">Word</button>
-        </div>
-
-        <div class="btns">
-          <button class="slow" onclick="speak('${x.l}',0.5)">Letter</button>
-          <button class="fast" onclick="speak('${x.l}',1)">Letter</button>
-        </div>
-
       </div>
-    </div>`;
+    `;
   });
 }
 
-document.querySelectorAll(".filter-btn").forEach(b=>{
-  b.onclick=()=>{
-    document.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    render(b.getAttribute("data"));
-  };
+document.querySelectorAll(".filter-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    render(button.getAttribute("data-filter"));
+  });
 });
 
 render();
