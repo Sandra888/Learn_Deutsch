@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>🇩🇪 Learn German ABC</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Baloo+2:wght@700;900&display=swap" rel="stylesheet"/>
 
 <style>
 :root {
-  --bg:#fff8f0;
   --text:#1a1a2e;
   --sub:#5f5f8a;
 }
@@ -23,9 +22,9 @@ body {
 }
 
 @keyframes bg {
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+  0% { background-position:0% 50% }
+  50% { background-position:100% 50% }
+  100% { background-position:0% 50% }
 }
 
 .hero {
@@ -44,33 +43,6 @@ body {
   font-weight:700;
   color:#4a148c;
   margin-top:8px;
-}
-
-.filter-bar {
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
-
-.filter-btn {
-  padding:10px 18px;
-  border-radius:999px;
-  border:none;
-  font-weight:800;
-  cursor:pointer;
-  background:white;
-  transition:0.3s;
-}
-
-.filter-btn:hover {
-  transform:scale(1.05);
-}
-
-.filter-btn.active {
-  background:#1a1a2e;
-  color:white;
 }
 
 .grid {
@@ -124,12 +96,12 @@ body {
 .word {
   font-size:1.3rem;
   font-weight:900;
-  color:#1a1a2e;
+  color:var(--text);
 }
 
 .pron {
-  font-size:0.9rem;
-  color:#5f5f8a;
+  font-size:1rem;
+  color:var(--sub);
 }
 
 .emoji {
@@ -154,14 +126,11 @@ button {
   cursor:pointer;
   transition:0.2s;
   font-size:1rem;
+  background:#ff7043;
 }
 
 button:hover {
   transform:translateY(-2px);
-}
-
-.slow {
-  background:#ff7043;
 }
 
 footer {
@@ -177,9 +146,8 @@ footer {
 
 <div class="hero">
   <h1>🇩🇪 Learn German ABC</h1>
-  <p>Tap buttons to hear pronunciation 🎧</p>
+  <p>Tap for spontaneous slow German pronunciation 🎧</p>
 </div>
-
 
 <div class="grid" id="grid"></div>
 
@@ -196,71 +164,117 @@ const COLORS = [
   "#ff5fac"
 ];
 
-const data = [
-  { upper:'A', lower:'a', phonetic:'Ah', example:'Apfel', emoji:'🍎' },
-  { upper:'B', lower:'b', phonetic:'Beh', example:'Ball', emoji:'⚽' },
-  { upper:'C', lower:'c', phonetic:'Tseh', example:'Computer', emoji:'💻' },
-  { upper:'D', lower:'d', phonetic:'Deh', example:'Dach', emoji:'🏠' },
-  { upper:'E', lower:'e', phonetic:'Eh', example:'Ei', emoji:'🥚' },
-  { upper:'F', lower:'f', phonetic:'Ef', example:'Fisch', emoji:'🐟' },
-  { upper:'G', lower:'g', phonetic:'Geh', example:'Garten', emoji:'🌳' },
-  { upper:'H', lower:'h', phonetic:'Hah', example:'Haus', emoji:'🏡' },
-  { upper:'I', lower:'i', phonetic:'Ih', example:'Insel', emoji:'🏝️' },
-  { upper:'J', lower:'j', phonetic:'Yot', example:'Jahr', emoji:'📅' },
-  { upper:'K', lower:'k', phonetic:'Kah', example:'Kuchen', emoji:'🎂' },
-  { upper:'L', lower:'l', phonetic:'El', example:'Lampe', emoji:'💡' },
-  { upper:'M', lower:'m', phonetic:'Em', example:'Maus', emoji:'🐭' },
-  { upper:'N', lower:'n', phonetic:'En', example:'Nacht', emoji:'🌙' },
-  { upper:'O', lower:'o', phonetic:'Oh', example:'Obst', emoji:'🍊' },
-  { upper:'P', lower:'p', phonetic:'Peh', example:'Pferd', emoji:'🐴' },
-  { upper:'Q', lower:'q', phonetic:'Kuh', example:'Quelle', emoji:'💧' },
-  { upper:'R', lower:'r', phonetic:'Er', example:'Radio', emoji:'📻' },
-  { upper:'S', lower:'s', phonetic:'Es', example:'Sonne', emoji:'☀️' },
-  { upper:'T', lower:'t', phonetic:'Teh', example:'Tisch', emoji:'🪑' },
-  { upper:'U', lower:'u', phonetic:'Uh', example:'Uhr', emoji:'⏰' },
-  { upper:'V', lower:'v', phonetic:'Fau', example:'Vogel', emoji:'🐦' },
-  { upper:'W', lower:'w', phonetic:'Veh', example:'Wasser', emoji:'💧' },
-  { upper:'X', lower:'x', phonetic:'Iks', example:'Xylophon', emoji:'🎼' },
-  { upper:'Y', lower:'y', phonetic:'Üpsilon', example:'Yoga', emoji:'🧘' },
-  { upper:'Z', lower:'z', phonetic:'Tset', example:'Zug', emoji:'🚂' },
+// Real German sounds
+const germanSounds = {
+  A:"ah", B:"beh", C:"tseh", D:"deh", E:"eh", F:"eff", G:"geh", H:"hah",
+  I:"ee", J:"yot", K:"kah", L:"ell", M:"emm", N:"enn", O:"oh", P:"peh",
+  Q:"koo", R:"err", S:"ess", T:"teh", U:"oo", V:"fow", W:"veh", X:"iks",
+  Y:"üp-si-lon", Z:"tsett", Ä:"eh", Ö:"ur", Ü:"ue", ß:"es-tsett"
+};
 
-  { upper:'Ä', lower:'ä', phonetic:'Äh', example:'Äpfel', emoji:'🍏', special:true },
-  { upper:'Ö', lower:'ö', phonetic:'Öh', example:'Öl', emoji:'🫙', special:true },
-  { upper:'Ü', lower:'ü', phonetic:'Üh', example:'Über', emoji:'✈️', special:true },
-  { upper:'ß', lower:'ß', phonetic:'Eszett', example:'Straße', emoji:'🛣️', special:true }
+const data = [
+  { upper:'A', lower:'a', phonetic:'ah', example:'Apfel', emoji:'🍎' },
+  { upper:'B', lower:'b', phonetic:'beh', example:'Ball', emoji:'⚽' },
+  { upper:'C', lower:'c', phonetic:'tseh', example:'Computer', emoji:'💻' },
+  { upper:'D', lower:'d', phonetic:'deh', example:'Dach', emoji:'🏠' },
+  { upper:'E', lower:'e', phonetic:'eh', example:'Ei', emoji:'🥚' },
+  { upper:'F', lower:'f', phonetic:'eff', example:'Fisch', emoji:'🐟' },
+  { upper:'G', lower:'g', phonetic:'geh', example:'Garten', emoji:'🌳' },
+  { upper:'H', lower:'h', phonetic:'hah', example:'Haus', emoji:'🏡' },
+  { upper:'I', lower:'i', phonetic:'ee', example:'Insel', emoji:'🏝️' },
+  { upper:'J', lower:'j', phonetic:'yot', example:'Jahr', emoji:'📅' },
+  { upper:'K', lower:'k', phonetic:'kah', example:'Kuchen', emoji:'🎂' },
+  { upper:'L', lower:'l', phonetic:'ell', example:'Lampe', emoji:'💡' },
+  { upper:'M', lower:'m', phonetic:'emm', example:'Maus', emoji:'🐭' },
+  { upper:'N', lower:'n', phonetic:'enn', example:'Nacht', emoji:'🌙' },
+  { upper:'O', lower:'o', phonetic:'oh', example:'Obst', emoji:'🍊' },
+  { upper:'P', lower:'p', phonetic:'peh', example:'Pferd', emoji:'🐴' },
+  { upper:'Q', lower:'q', phonetic:'koo', example:'Quelle', emoji:'💧' },
+  { upper:'R', lower:'r', phonetic:'err', example:'Radio', emoji:'📻' },
+  { upper:'S', lower:'s', phonetic:'ess', example:'Sonne', emoji:'☀️' },
+  { upper:'T', lower:'t', phonetic:'teh', example:'Tisch', emoji:'🪑' },
+  { upper:'U', lower:'u', phonetic:'oo', example:'Uhr', emoji:'⏰' },
+  { upper:'V', lower:'v', phonetic:'fow', example:'Vogel', emoji:'🐦' },
+  { upper:'W', lower:'w', phonetic:'veh', example:'Wasser', emoji:'💧' },
+  { upper:'X', lower:'x', phonetic:'iks', example:'Xylophon', emoji:'🎼' },
+  { upper:'Y', lower:'y', phonetic:'üp-si-lon', example:'Yoga', emoji:'🧘' },
+  { upper:'Z', lower:'z', phonetic:'tsett', example:'Zug', emoji:'🚂' },
+  { upper:'Ä', lower:'ä', phonetic:'eh', example:'Äpfel', emoji:'🍏' },
+  { upper:'Ö', lower:'ö', phonetic:'ur', example:'Öl', emoji:'🫙' },
+  { upper:'Ü', lower:'ü', phonetic:'ue', example:'Über', emoji:'✈️' },
+  { upper:'ß', lower:'ß', phonetic:'es-tsett', example:'Straße', emoji:'🛣️' }
 ];
 
-function speak(text, rate) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "de-DE";
-  utterance.rate = rate;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utterance);
+// Instant voice setup
+let germanVoice = null;
+
+function initGermanVoice() {
+  const voices = speechSynthesis.getVoices();
+
+  germanVoice = voices.find(voice =>
+    voice.lang === "de-DE" ||
+    voice.lang === "de-AT" ||
+    voice.lang === "de-CH" ||
+    voice.lang.startsWith("de")
+  ) || voices[0];
 }
 
-function render(filter = "all") {
+initGermanVoice();
+speechSynthesis.onvoiceschanged = initGermanVoice;
+
+// Unlock for mobile + instant sound
+document.addEventListener("click", unlockSpeech, { once:true });
+document.addEventListener("touchstart", unlockSpeech, { once:true });
+
+function unlockSpeech() {
+  const unlock = new SpeechSynthesisUtterance(".");
+  unlock.volume = 0;
+  speechSynthesis.speak(unlock);
+  speechSynthesis.cancel();
+}
+
+// Spontaneous + slow speech
+function speak(text, rate = 0.28) {
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  utterance.voice = germanVoice;
+  utterance.rate = rate;
+  utterance.pitch = 0.85;
+  utterance.volume = 1;
+
+  setTimeout(() => {
+    window.speechSynthesis.speak(utterance);
+  }, 0);
+}
+
+function speakLetter(letter) {
+  speak(germanSounds[letter] || letter, 0.22);
+}
+
+function speakWord(word) {
+  speak(word, 0.28);
+}
+
+// Render cards
+function render() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  const filteredData = data.filter(item => {
-    if (filter === "all") return true;
-    if (filter === "special") return item.special;
-    if (filter === "az") return !item.special;
-    return true;
-  });
-
-  filteredData.forEach((item, i) => {
+  data.forEach((item, i) => {
     const color = COLORS[i % COLORS.length];
 
     grid.innerHTML += `
       <div class="card">
         <div class="stripe" style="background:${color}"></div>
-        <div class="body">
 
+        <div class="body">
           <div class="top">
             <div class="bubble" style="background:${color}">
-              ${item.lower || item.upper}
+              ${item.lower}
             </div>
+
             <div>
               <div class="word">${item.example}</div>
               <div class="pron">/${item.phonetic}/</div>
@@ -270,26 +284,14 @@ function render(filter = "all") {
           <div class="emoji">${item.emoji}</div>
 
           <div class="btns">
-            <button class="slow" onclick="speak('${item.lower || item.upper}',0.5)">🔊 Letter</button>
-            <button class="slow" onclick="speak('${item.example}',0.5)">🔊 Word</button>
+            <button onclick="speakLetter('${item.upper}')">🔊 Letter</button>
+            <button onclick="speakWord('${item.example}')">🔊 Word</button>
           </div>
-
         </div>
       </div>
     `;
   });
 }
-
-document.querySelectorAll(".filter-btn").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    button.classList.add("active");
-    render(button.getAttribute("data-filter"));
-  });
-});
 
 render();
 </script>
