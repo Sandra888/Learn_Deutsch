@@ -180,11 +180,6 @@ footer {
   <p>Tap buttons to hear pronunciation 🎧</p>
 </div>
 
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="az">A-Z</button>
-  <button class="filter-btn" data-filter="special">Ä Ö Ü ß</button>
-</div>
 
 <div class="grid" id="grid"></div>
 
@@ -275,7 +270,7 @@ function render(filter = "all") {
           <div class="emoji">${item.emoji}</div>
 
           <div class="btns">
-            <button class="slow" onclick="speak('${item.lower || item.upper}',0.5)">🔤 Letter</button>
+            <button class="slow" onclick="speak('${item.lower || item.upper}',0.5)">🔊 Letter</button>
             <button class="slow" onclick="speak('${item.example}',0.5)">🔊 Word</button>
           </div>
 
