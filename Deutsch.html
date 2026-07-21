@@ -3,150 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🇩🇪 Learn German ABC</title>
+  <title>Lern das deutsche ABC</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Baloo+2:wght@700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
     :root {
-      --text:#1a1a2e;
-      --sub:#5f5f8a;
+      --ink:#2b2438;
+      --sub:#6b6485;
+      --cream:#fff6e9;
+      --card:#fffdf8;
+      --line:#e7dcc8;
     }
+
+    * { box-sizing:border-box; }
 
     body {
       margin:0;
       font-family:'Nunito',sans-serif;
-      background:linear-gradient(135deg,#ff9a9e,#fad0c4,#a1c4fd,#c2ffd8);
-      background-size:400% 400%;
-      animation:bg 12s ease infinite;
-    }
-
-    @keyframes bg {
-      0% { background-position:0% 50% }
-      50% { background-position:100% 50% }
-      100% { background-position:0% 50% }
+      color:var(--ink);
+      background-color:var(--cream);
+      background-image:
+        radial-gradient(circle at 8px 8px, rgba(43,36,56,0.045) 1.4px, transparent 1.4px);
+      background-size:26px 26px;
+      min-height:100vh;
     }
 
     .hero {
       text-align:center;
-      padding:40px 20px 20px;
+      padding:56px 20px 28px;
+      position:relative;
     }
+
+    .hero .flagbar {
+      display:inline-flex;
+      gap:5px;
+      margin-bottom:18px;
+    }
+    .flagbar span {
+      width:34px; height:8px; border-radius:4px;
+    }
+    .flagbar span:nth-child(1){ background:#1a1a1a; }
+    .flagbar span:nth-child(2){ background:#d00027; }
+    .flagbar span:nth-child(3){ background:#ffce00; }
 
     .hero h1 {
       font-family:'Baloo 2',cursive;
-      font-size:3rem;
-      color:#ff2e88;
+      font-weight:800;
+      font-size:clamp(2.2rem, 5vw, 3.4rem);
+      color:var(--ink);
       margin:0;
+      letter-spacing:-0.5px;
+    }
+
+    .hero h1 .accent {
+      color:#d00027;
     }
 
     .hero p {
       font-weight:700;
-      color:#4a148c;
-      margin-top:8px;
+      color:var(--sub);
+      margin-top:10px;
+      font-size:1.05rem;
     }
 
     .grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:16px;
-      padding:20px;
-      max-width:1200px;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:28px 22px;
+      padding:10px 28px 70px;
+      max-width:1240px;
       margin:auto;
     }
 
     .card {
-      background:white;
-      border-radius:20px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.1);
-      overflow:hidden;
-      transition:0.3s;
+      background:var(--card);
+      border-radius:14px;
+      border:1px solid var(--line);
+      box-shadow:0 10px 22px rgba(43,36,56,0.10);
+      overflow:visible;
+      position:relative;
+      padding:26px 18px 18px;
+      transition:transform 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .card:hover {
-      transform:scale(1.03);
+    /* alternating pinboard tilt */
+    .grid .card:nth-child(6n+1){ transform:rotate(-1.6deg); }
+    .grid .card:nth-child(6n+2){ transform:rotate(1.2deg); }
+    .grid .card:nth-child(6n+3){ transform:rotate(-0.8deg); }
+    .grid .card:nth-child(6n+4){ transform:rotate(1.8deg); }
+    .grid .card:nth-child(6n+5){ transform:rotate(-1.2deg); }
+    .grid .card:nth-child(6n+6){ transform:rotate(0.9deg); }
+
+    .card:hover, .card:focus-within {
+      transform:rotate(0deg) translateY(-4px);
+      box-shadow:0 16px 30px rgba(43,36,56,0.16);
+      z-index:2;
     }
 
-    .stripe {
-      height:6px;
+    .tape {
+      position:absolute;
+      top:-12px;
+      left:50%;
+      width:64px;
+      height:22px;
+      transform:translateX(-50%) rotate(-3deg);
+      border-radius:2px;
+      opacity:0.85;
     }
 
-    .body {
-      padding:15px;
-    }
-
-    .top {
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .bubble {
-      width:55px;
-      height:55px;
-      border-radius:12px;
+    .badge {
+      width:64px;
+      height:64px;
+      border-radius:16px;
       display:flex;
       align-items:center;
       justify-content:center;
       color:white;
-      font-weight:900;
-      font-size:1.5rem;
+      font-family:'Baloo 2',cursive;
+      font-weight:800;
+      font-size:1.9rem;
       text-transform:lowercase;
+      border:3px solid var(--card);
+      box-shadow:0 4px 0 rgba(0,0,0,0.15);
+      margin:0 auto 12px;
     }
 
-    .word {
-      font-size:1.3rem;
-      font-weight:900;
-      color:var(--text);
-    }
-
-    .pron {
-      font-size:1rem;
+    .letterlabel {
+      text-align:center;
+      font-family:'Space Mono', monospace;
+      font-size:0.72rem;
       color:var(--sub);
+      letter-spacing:0.5px;
+      margin-bottom:14px;
     }
 
     .emoji {
-      font-size:3.5rem;
+      font-size:2.6rem;
       text-align:center;
-      margin:10px 0;
+      margin:4px 0 8px;
+    }
+
+    .word {
+      font-size:1.28rem;
+      font-weight:800;
+      color:var(--ink);
+      text-align:center;
+      font-family:'Baloo 2', cursive;
+    }
+
+    .pron {
+      font-family:'Space Mono', monospace;
+      font-size:0.82rem;
+      color:var(--sub);
+      text-align:center;
+      margin-top:2px;
+      margin-bottom:14px;
     }
 
     .btns {
       display:flex;
       gap:8px;
-      margin-top:10px;
-      flex-wrap:wrap;
     }
 
     button {
       flex:1;
-      padding:10px;
+      padding:10px 6px;
       border:none;
-      border-radius:12px;
+      border-radius:10px;
       color:white;
       font-weight:800;
+      font-family:'Nunito', sans-serif;
       cursor:pointer;
-      transition:0.2s;
-      font-size:1rem;
-      background:#ff7043;
+      transition:transform 0.15s ease, filter 0.15s ease;
+      font-size:0.85rem;
+      background:#3d3560;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:5px;
     }
 
-    button:nth-child(2) {
-      background:#42a5f5;
+    button.word-btn {
+      background:#d00027;
     }
 
-    button:nth-child(3) {
-      background:#66bb6a;
+    button:hover { filter:brightness(1.08); }
+    button:active { transform:scale(0.95); }
+
+    button:focus-visible, .card:focus-visible {
+      outline:3px solid #4EA8DE;
+      outline-offset:2px;
     }
 
-    button:hover {
-      transform:translateY(-2px);
+    button.playing {
+      animation:pulse 0.4s ease;
+    }
+    @keyframes pulse {
+      0% { transform:scale(1); }
+      40% { transform:scale(0.93); }
+      100% { transform:scale(1); }
     }
 
     footer {
       text-align:center;
-      padding:20px;
-      font-weight:800;
-      color:#5f5f8a;
+      padding:10px 20px 40px;
+      font-weight:700;
+      color:var(--sub);
+      font-size:0.9rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card, button { transition:none; }
+      button.playing { animation:none; }
     }
   </style>
 </head>
@@ -154,8 +223,9 @@
 <body>
 
   <div class="hero">
-    <h1>🇩🇪 Learn German ABC</h1>
-    <p>Tippe für langsame deutsche Aussprache 🎧</p>
+    <div class="flagbar"><span></span><span></span><span></span></div>
+    <h1>Lern das deutsche <span class="accent">ABC</span></h1>
+    <p>Tippe auf eine Karte für die deutsche Aussprache 🎧</p>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -163,146 +233,113 @@
   <footer>Deutsch macht Spaß! 🌈</footer>
 
   <script>
+    // curated sticker palette
     const COLORS = [
-      "#ff3b5c",
-      "#ff7b2f",
-      "#ffd600",
-      "#00d68f",
-      "#3d8bff",
-      "#9b59ff",
-      "#ff5fac"
+      "#FF5A5F", "#FFB627", "#3DDC97", "#4EA8DE",
+      "#9B5DE5", "#FF6FB5", "#FF8C42", "#2EC4B6"
     ];
 
-    // Letter names (spoken)
-    const germanSounds = {
+    // what's SHOWN on the card as the phonetic caption (original spelling)
+    const letterDisplay = {
       A:"ah", B:"beh", C:"tseh", D:"deh", E:"eh", F:"eff", G:"geh", H:"hah",
       I:"ee", J:"yot", K:"kah", L:"ell", M:"emm", N:"enn", O:"oh", P:"peh",
-      Q:"koo", R:"err", S:"ess", T:"teh", U:"oo", V:"fow", W:"veh", X:"iks",
+      Q:"koo", R:"err", S:"ess", T:"teh", U:"oo", V:"fau", W:"veh", X:"iks",
       Y:"üpsilon", Z:"tsett",
-      Ä:"äh", Ö:"ö", Ü:"ü", ß:"Eszett"
+      Ä:"äh", Ö:"ö", Ü:"ü", ß:"ess-tsett"
     };
 
-    // Letter + example phrase
-    const letterExamples = {
-      A:"A wie Apfel",
-      B:"B wie Ball",
-      C:"C wie Computer",
-      D:"D wie Dose",
-      E:"E wie Ei",
-      F:"F wie Fisch",
-      G:"G wie Garten",
-      H:"H wie Haus",
-      I:"I wie Insel",
-      J:"J wie Jacke",
-      K:"K wie Kuchen",
-      L:"L wie Löwe",
-      M:"M wie Maus",
-      N:"N wie Nacht",
-      O:"O wie Obst",
-      P:"P wie Pferd",
-      Q:"Q wie Qualle",
-      R:"R wie Radio",
-      S:"S wie Sonne",
-      T:"T wie Tisch",
-      U:"U wie Uhr",
-      V:"V wie Vogel",
-      W:"W wie Wasser",
-      X:"X wie Xylophon",
-      Y:"Y wie Yoga",
-      Z:"Z wie Zug",
-      Ä:"Ä wie Äpfel",
-      Ö:"Ö wie Öl",
-      Ü:"Ü wie Bücher",
-      ß:"ß wie Straße"
+    // what's SPOKEN by the German TTS voice (spelled using real German
+    // graphemes/words so any de-DE voice reads them correctly)
+    const letterSpeech = {
+      A:"ah", B:"beh", C:"zeh", D:"deh", E:"eh", F:"eff", G:"geh", H:"hah",
+      I:"ie", J:"jot", K:"kah", L:"ell", M:"emm", N:"enn", O:"oh", P:"peh",
+      Q:"Kuh", R:"er", S:"ess", T:"teh", U:"Uhr", V:"fau", W:"weh", X:"iks",
+      Y:"Ypsilon", Z:"zett",
+      Ä:"äh", Ö:"ö", Ü:"ü", ß:"ess-zett"
     };
 
+    // data: each entry has the letter, an example word, and a simple
+    // phonetic respelling of how that WORD is actually pronounced in German
     const data = [
-      { upper:'A', lower:'a', phonetic:'ah', example:'Apfel', emoji:'🍎' },
-      { upper:'B', lower:'b', phonetic:'beh', example:'Ball', emoji:'⚽' },
-      { upper:'C', lower:'c', phonetic:'tseh', example:'Computer', emoji:'💻' },
-      { upper:'D', lower:'d', phonetic:'deh', example:'Dose', emoji:'🥤' },
-      { upper:'E', lower:'e', phonetic:'eh', example:'Ei', emoji:'🥚' },
-      { upper:'F', lower:'f', phonetic:'eff', example:'Fisch', emoji:'🐟' },
-      { upper:'G', lower:'g', phonetic:'geh', example:'Garten', emoji:'🌳' },
-      { upper:'H', lower:'h', phonetic:'hah', example:'Haus', emoji:'🏡' },
-      { upper:'I', lower:'i', phonetic:'ee', example:'Insel', emoji:'🏝️' },
-      { upper:'J', lower:'j', phonetic:'yot', example:'Jacke', emoji:'🧥' },
-      { upper:'K', lower:'k', phonetic:'kah', example:'Kuchen', emoji:'🎂' },
-      { upper:'L', lower:'l', phonetic:'ell', example:'Löwe', emoji:'🦁' },
-      { upper:'M', lower:'m', phonetic:'emm', example:'Maus', emoji:'🐭' },
-      { upper:'N', lower:'n', phonetic:'enn', example:'Nacht', emoji:'🌙' },
-      { upper:'O', lower:'o', phonetic:'oh', example:'Obst', emoji:'🍊' },
-      { upper:'P', lower:'p', phonetic:'peh', example:'Pferd', emoji:'🐴' },
-      { upper:'Q', lower:'q', phonetic:'koo', example:'Qualle', emoji:'🪼' },
-      { upper:'R', lower:'r', phonetic:'err', example:'Radio', emoji:'📻' },
-      { upper:'S', lower:'s', phonetic:'ess', example:'Sonne', emoji:'☀️' },
-      { upper:'T', lower:'t', phonetic:'teh', example:'Tisch', emoji:'🪑' },
-      { upper:'U', lower:'u', phonetic:'oo', example:'Uhr', emoji:'⏰' },
-      { upper:'V', lower:'v', phonetic:'fow', example:'Vogel', emoji:'🐦' },
-      { upper:'W', lower:'w', phonetic:'veh', example:'Wasser', emoji:'💧' },
-      { upper:'X', lower:'x', phonetic:'iks', example:'Xylophon', emoji:'🎼' },
-      { upper:'Y', lower:'y', phonetic:'üpsilon', example:'Yoga', emoji:'🧘' },
-      { upper:'Z', lower:'z', phonetic:'tsett', example:'Zug', emoji:'🚂' },
-      { upper:'Ä', lower:'ä', phonetic:'äh', example:'Äpfel', emoji:'🍏' },
-      { upper:'Ö', lower:'ö', phonetic:'ö', example:'Öl', emoji:'🫙' },
-      { upper:'Ü', lower:'ü', phonetic:'ü', example:'Bücher', emoji:'📚' },
-      { upper:'ß', lower:'ß', phonetic:'Eszett', example:'Straße', emoji:'🛣️' }
+      { upper:'A', lower:'a', example:'Apfel',    pron:'AP-fel',        emoji:'🍎' },
+      { upper:'B', lower:'b', example:'Ball',     pron:'bahl',          emoji:'⚽' },
+      { upper:'C', lower:'c', example:'Computer', pron:'kom-PYOO-ter',  emoji:'💻' },
+      { upper:'D', lower:'d', example:'Dose',     pron:'DOH-zuh',       emoji:'🥤' },
+      { upper:'E', lower:'e', example:'Ei',       pron:'eye',           emoji:'🥚' },
+      { upper:'F', lower:'f', example:'Fisch',    pron:'fish',          emoji:'🐟' },
+      { upper:'G', lower:'g', example:'Garten',   pron:'GAR-ten',       emoji:'🌳' },
+      { upper:'H', lower:'h', example:'Haus',     pron:'house',         emoji:'🏡' },
+      { upper:'I', lower:'i', example:'Insel',    pron:'IN-zel',        emoji:'🏝️' },
+      { upper:'J', lower:'j', example:'Jacke',    pron:'YAH-kuh',       emoji:'🧥' },
+      { upper:'K', lower:'k', example:'Kuchen',   pron:'KOO-khen',      emoji:'🎂' },
+      { upper:'L', lower:'l', example:'Löwe',     pron:'LOE-vuh',       emoji:'🦁' },
+      { upper:'M', lower:'m', example:'Maus',     pron:'mouse',         emoji:'🐭' },
+      { upper:'N', lower:'n', example:'Nacht',    pron:'nakht',         emoji:'🌙' },
+      { upper:'O', lower:'o', example:'Obst',     pron:'ohpst',         emoji:'🍊' },
+      { upper:'P', lower:'p', example:'Pferd',    pron:'pfairt',        emoji:'🐴' },
+      { upper:'Q', lower:'q', example:'Qualle',   pron:'KVAH-luh',      emoji:'🪼' },
+      { upper:'R', lower:'r', example:'Radio',    pron:'RAH-dee-oh',    emoji:'📻' },
+      { upper:'S', lower:'s', example:'Sonne',    pron:'ZAW-nuh',       emoji:'☀️' },
+      { upper:'T', lower:'t', example:'Tisch',    pron:'tish',          emoji:'🪑' },
+      { upper:'U', lower:'u', example:'Uhr',      pron:'oor',           emoji:'⏰' },
+      { upper:'V', lower:'v', example:'Vogel',    pron:'FOH-gel',       emoji:'🐦' },
+      { upper:'W', lower:'w', example:'Wasser',   pron:'VAH-ser',       emoji:'💧' },
+      { upper:'X', lower:'x', example:'Xylophon', pron:'ksew-loh-FOHN', emoji:'🎼' },
+      { upper:'Y', lower:'y', example:'Yoga',     pron:'YOH-gah',       emoji:'🧘' },
+      { upper:'Z', lower:'z', example:'Zug',      pron:'tsook',         emoji:'🚂' },
+      { upper:'Ä', lower:'ä', example:'Äpfel',    pron:'EP-fel',        emoji:'🍏' },
+      { upper:'Ö', lower:'ö', example:'Öl',       pron:'url',           emoji:'🫙' },
+      { upper:'Ü', lower:'ü', example:'Bücher',   pron:'BUE-cher',      emoji:'📚' },
+      { upper:'ß', lower:'ß', example:'Straße',   pron:'SHTRAH-suh',    emoji:'🛣️' }
     ];
 
     let germanVoice = null;
 
     function initGermanVoice() {
       const voices = speechSynthesis.getVoices();
-      germanVoice = voices.find(voice =>
-        voice.lang === "de-DE" ||
-        voice.lang === "de-AT" ||
-        voice.lang === "de-CH" ||
-        voice.lang.startsWith("de")
-      ) || voices[0];
+      germanVoice = voices.find(v => v.lang.startsWith("de")) || voices[0];
     }
 
     initGermanVoice();
     speechSynthesis.onvoiceschanged = initGermanVoice;
 
-    // Unlock for mobile
     document.addEventListener("click", unlockSpeech, { once:true });
     document.addEventListener("touchstart", unlockSpeech, { once:true });
 
     function unlockSpeech() {
-      const unlock = new SpeechSynthesisUtterance(".");
-      unlock.volume = 0;
+      const unlock = new SpeechSynthesisUtterance("eins zwei drei");
       unlock.lang = "de-DE";
+      unlock.volume = 0;
+      unlock.rate = 1.0;
       speechSynthesis.speak(unlock);
-      speechSynthesis.cancel();
+      setTimeout(() => speechSynthesis.cancel(), 50);
     }
 
-    function speak(text, rate = 0.28) {
-      window.speechSynthesis.cancel();
-
+    function speak(text, rate = 0.55) {
+      speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "de-DE";
       utterance.voice = germanVoice;
       utterance.rate = rate;
-      utterance.pitch = 0.9;
+      utterance.pitch = 1.0;
       utterance.volume = 1;
-
-      setTimeout(() => {
-        window.speechSynthesis.speak(utterance);
-      }, 0);
+      speechSynthesis.speak(utterance);
     }
 
-    function speakLetter(letter) {
-      const sound = germanSounds[letter] || letter;
-      speak(sound, 0.22);
+    function pulse(btn) {
+      btn.classList.remove("playing");
+      void btn.offsetWidth;
+      btn.classList.add("playing");
     }
 
-    function speakWord(word) {
-      speak(word, 0.28);
+    function speakLetter(letter, btn) {
+      pulse(btn);
+      speak(letterSpeech[letter] || letter, 0.55);
     }
 
-    function speakLetterWord(letter, word) {
-      const phrase = letterExamples[letter] || `${letter} wie ${word}`;
-      speak(phrase, 0.28);
+    function speakWord(word, btn) {
+      pulse(btn);
+      speak(word, 0.55);
     }
 
     function render() {
@@ -311,33 +348,27 @@
 
       data.forEach((item, i) => {
         const color = COLORS[i % COLORS.length];
+        const tapeColor = COLORS[(i + 3) % COLORS.length];
 
-        grid.innerHTML += `
-          <div class="card">
-            <div class="stripe" style="background:${color}"></div>
-
-            <div class="body">
-              <div class="top">
-                <div class="bubble" style="background:${color}">
-                  ${item.lower}
-                </div>
-
-                <div>
-                  <div class="word">${item.example}</div>
-                  <div class="pron">/${item.phonetic}/</div>
-                </div>
-              </div>
-
-              <div class="emoji">${item.emoji}</div>
-
-              <div class="btns">
-                <button onclick="speakLetter('${item.upper}')">🔊 Buchstabe</button>
-                <button onclick="speakWord('${item.example}')">🔊 Wort</button>
-                <button onclick="speakLetterWord('${item.upper}','${item.example}')">🔊 Buchstabe + Wort</button>
-              </div>
-            </div>
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="tape" style="background:${tapeColor}"></div>
+          <div class="badge" style="background:${color}">${item.lower}</div>
+          <div class="letterlabel">/${letterDisplay[item.upper]}/</div>
+          <div class="emoji">${item.emoji}</div>
+          <div class="word">${item.example}</div>
+          <div class="pron">/${item.pron}/</div>
+          <div class="btns">
+            <button class="letter-btn">🔤 Buchstabe</button>
+            <button class="word-btn">🔊 Wort</button>
           </div>
         `;
+
+        card.querySelector(".letter-btn").addEventListener("click", (e) => speakLetter(item.upper, e.currentTarget));
+        card.querySelector(".word-btn").addEventListener("click", (e) => speakWord(item.example, e.currentTarget));
+
+        grid.appendChild(card);
       });
     }
 
